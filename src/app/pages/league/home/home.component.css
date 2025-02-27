@@ -1,0 +1,5 @@
+::ng-deep .p-panel {
+  display: block !important;
+  height: 100% !important;
+  width: 100% !important;
+}

@@ -1,0 +1,56 @@
+<div class="h-full flex flex-col">
+  <h3 class="text-center pb-8">{{pageTitle}}</h3>
+  <p-table
+    *ngIf="seasonStarted else preseasonMessage"
+    [tableStyle]="{'min-width': '50rem'}"
+    [styleClass]="gridStyle"
+    [columns]="columnDefs"
+    [value]="standingsData"
+    sortField="wins"
+    [sortOrder]="-1">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Manager</th>
+        <th pSortableColumn="wins">
+          Wins <p-sortIcon field="wins" />
+        </th>
+        <th pSortableColumn="losses">
+          Losses <p-sortIcon field="losses" />
+        </th>
+        <th>
+          Streak
+        </th>
+        <th pSortableColumn="maxPoints">
+          Max Points <p-sortIcon field="maxPoints" />
+        </th>
+        <th pSortableColumn="points">
+          PF <p-sortIcon field="points" />
+        </th>
+        <th pSortableColumn="pointsAgainst">
+          PA <p-sortIcon field="pointsAgainst" />
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-team>
+      <tr>
+        <td>
+          <div class="flex items-center">
+            <img [src]="team.avatarUrl" alt="avatar" width="30" class="rounded-md" />
+            <p class="pl-2">{{ team.username }}</p>
+          </div>
+        </td>
+        <td>{{team.wins}}</td>
+        <td>{{team.losses}}</td>
+        <td>
+          <p-tag [value]="team.streak" [icon]="team.streakIcon" [severity]="team.streakColor" />
+        </td>
+        <td>{{team.maxPoints}}</td>
+        <td>{{team.points}}</td>
+        <td>{{team.pointsAgainst}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <ng-template #preseasonMessage>
+    <h3 class="text-center">Season begins soon!</h3>
+  </ng-template>
+</div>

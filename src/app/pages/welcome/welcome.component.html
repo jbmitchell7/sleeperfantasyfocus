@@ -1,0 +1,54 @@
+<div class="flex flex-col h-full p-5">
+  <p-messages class="self-center"></p-messages>
+  <div class="self-end">
+    <ui-color-mode-btn />
+  </div>
+  <div class="flex grow flex-col justify-center items-center">
+    <h1>
+      Begin by finding the ID to your Sleeper Fantasy League*
+    </h1>
+    <div>
+      <h3 class="pt-5 pb-2">To find you league ID either:</h3>
+      <div class="flex flex-col sm:flex-row pb-3">
+        <div class="p-4">
+          <p class="font-bold">On a Computer:</p>
+          <ol class="list-decimal">
+            <li>
+              Go to <a href="https://sleeper.app" class="sleeper-link">sleeper.app</a> and find the league you want.
+            </li>
+            <li>
+              Copy the number in the URL that comes after<br />
+              https://sleeper.app/leagues/
+            </li>
+            <li>Paste it below</li>
+          </ol>
+        </div>
+        <div class="p-4">
+          <p class="font-bold">On the Sleeper App:</p>
+          <ol class="list-decimal">
+            <li>Go to your League page</li>
+            <li>Tap the settings gear by League Settings</li>
+            <li>Tap on General</li>
+            <li>Scroll to the bottom and tap Copy League ID</li>
+            <li>Paste the league id into the form below</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <form class="flex flex-col shrink-0 gap-2" (ngSubmit)="setLeagueId()">
+      <input type="text" [formControl]="leagueInputForm" pInputText placeholder="League ID" />
+      <p-button type="submit" [disabled]="leagueInputForm.invalid" label="View My League">
+      </p-button>
+    </form>
+  </div>
+  <footer class="flex flex-col justify-self-end pt-5">
+    <p>
+      *note: SFF works for all Sleeper fantasy leagues, but it does not work for
+      March Madness, Squads, or any other event that doesn't involve a draft or
+      rosters.
+    </p>
+    <a href="https://www.flaticon.com/free-icons/football-helmet" title="football helmet icons" class="attribution">
+      Football helmet icons created by Flat Icons - Flaticon
+    </a>
+  </footer>
+</div>

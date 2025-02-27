@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+html,
+body {
+  height: 100%;
+}
+
+@layer base {
+  h1 {
+    font-size: var(--text-4xl);
+  }
+
+  h2 {
+    font-size: var(--text-3xl);
+  }
+
+  h3 {
+    font-size: var(--text-2xl);
+  }
+
+  h4 {
+    font-size: var(--text-xl);
+  }
+
+  h5 {
+    font-size: var(--text-lg);
+  }
+
+  p, a, li, span {
+    font-size: var(--text-sm);
+  }
+}
+
+:root {
+  .attribution {
+    font-size: 10px;
+  }
+}
+
+p-messages {
+  position: absolute;
+}
+
+.p-panel-title {
+  font-size: var(--text-xl);
+}
