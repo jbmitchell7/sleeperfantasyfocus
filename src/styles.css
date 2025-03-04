@@ -31,12 +31,6 @@ body {
   }
 }
 
-:root {
-  .attribution {
-    font-size: 10px;
-  }
-}
-
 p-messages {
   position: absolute;
 }

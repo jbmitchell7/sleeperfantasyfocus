@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
 import { ColorModeBtnComponent } from '../../components/color-mode-btn/color-mode-btn.component';
+import { IconAttributionComponent } from '../../components/icon-attribution/icon-attribution.component';
 
 @Component({
   imports: [
@@ -18,7 +19,8 @@ import { ColorModeBtnComponent } from '../../components/color-mode-btn/color-mod
     ReactiveFormsModule,
     MessagesModule,
     FormsModule,
-    ColorModeBtnComponent
+    ColorModeBtnComponent,
+    IconAttributionComponent
   ],
   providers: [MessageService],
   selector: 'app-welcome',
