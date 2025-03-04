@@ -1,8 +1,14 @@
 <div >
   <p-menubar [model]="menuItems">
+    <ng-template #start>
+      <img src="icons/helmet.png" alt="helmet icon" class="h-8" />
+    </ng-template>
     <ng-template #end>
       <ui-color-mode-btn />
     </ng-template>
   </p-menubar>
-  <h2 class="text-center pt-5">{{leagueName}}</h2>
+  <div class="flex justify-center items-center gap-2 pt-5">
+    <img src="icons/icon-512x512.png" alt="trophy icon" class="h-20" />
+    <h2>{{leagueName}}</h2>
+  </div>
 </div>
