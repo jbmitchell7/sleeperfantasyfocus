@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { leagueEntryRequest } from './store/global.actions';
 import Bowser from "bowser";
@@ -11,12 +11,15 @@ import Bowser from "bowser";
 })
 export class AppComponent {
   readonly #store = inject(Store);
+  readonly #router = inject(Router);
 
   constructor() {
     this.#setMobile();
     const id = localStorage.getItem('LEAGUE_ID');
     if (!!id) {
       this.#store.dispatch(leagueEntryRequest({ leagueId: id }));
+    } else {
+      this.#router.navigate(['welcome']);
     }
   }
 
