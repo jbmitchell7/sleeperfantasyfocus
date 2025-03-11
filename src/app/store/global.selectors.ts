@@ -4,9 +4,9 @@ import { ManagerState } from './managers/managers.reducers';
 import { RosterState } from './rosters/rosters.reducers';
 import { TransactionsState } from './transactions/transactions.reducer';
 import { PlayersState } from './players/players.reducer';
-import { RosterMove, Transaction } from '../data/interfaces/Transactions';
-import { LeagueUser } from '../data/interfaces/leagueuser';
-import { Player } from '../data/interfaces/roster';
+import { Transaction } from '../data/interfaces/Transactions';
+import { getCurrentTransactionsWeek, getRosterMoves } from '../utils/transactions';
+import { getSeverity, getStreakIcon } from '../utils/standings';
 
 export interface DataInterface {
   isLoading: boolean;
@@ -64,69 +64,14 @@ export const selectStandingsData = (state: AppState) => {
   return data;
 };
 
-const getSeverity = (streak: string): 'success' | 'info' | 'warning' | 'danger' => {
-  const type = streak.slice(-1);
-  const streakNumber = +streak.slice(0, -1);
-  if (type.toLowerCase() === 'l') {
-    return streakNumber > 2 ? 'info' : 'warning';
-  }
-  return streakNumber > 2 ? 'danger' : 'success';
-};
-
-const getStreakIcon = (streak: string): string => {
-  const type = streak.slice(-1);
-  const streakNumber = +streak.slice(0, -1);
-  if (type.toLowerCase() === 'l') {
-    return streakNumber > 2 ? 'fa-regular fa-snowflake' : 'fa-regular fa-face-frown';
-  }
-  return streakNumber > 2 ? 'fa-solid fa-fire' : 'fa-regular fa-face-smile';
-};
-
 export const selectCurrentWeekTransactions = (state: AppState): Transaction[] => {
-  const currentWeek = state.leagueData.league.sportState?.week;
+  const currentWeek = getCurrentTransactionsWeek(state.leagueData.league);
   const weeklyTransactions = state.transactionsData.transactions[currentWeek];
-  return weeklyTransactions?.length ? weeklyTransactions?.map(t => ({
+  if (!weeklyTransactions?.length) {
+    return [];
+  }
+  return weeklyTransactions.map(t => ({
     ...t,
     rosterMoves: getRosterMoves(t, state)
-  })) : []
-}
-
-const getRosterMoves = (t: Transaction, state: AppState) => {
-  const moves = [] as RosterMove[];
-  t.roster_ids.forEach(id => moves.push(
-    getMoveData(state.playerData, t, id, getManager(state, id))
-  ));
-  return moves;
-};
-
-const getMoveData = (state: PlayersState, transaction: Transaction, id: number, manager: LeagueUser| undefined): RosterMove  => {
-  let result = {
-    adds: [] as Partial<Player>[],
-    drops: [] as Partial<Player>[],
-    manager,
-    type: transaction.type,
-    waiverBid: transaction.settings?.waiver_bid
-  };
-  if (transaction.adds !== null) {
-    Object.keys(transaction.adds).forEach((key) => {
-      if (transaction.adds?.[+key] === id) {
-        result.adds.push(state.entities[key] ?? {player_id: key} as Partial<Player>);
-      }
-    })
-  }
-  if (transaction.drops !== null) {
-    Object.keys(transaction.drops).forEach((key) => {
-      if (transaction.drops?.[+key] === id) {
-        result.drops.push(state.entities[key] ?? {player_id: key});
-      }
-    })
-  }
-  return result;
-};
-
-const getManager = (state: AppState, rosterId: number): LeagueUser | undefined => {
-  const managerId = Object
-    .keys(state.rosterData.entities)
-    .find(key => state.rosterData.entities[key]?.roster_id === rosterId);
-  return managerId ? state.managersData.entities[managerId]: undefined;
+  }));
 };

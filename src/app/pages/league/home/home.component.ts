@@ -14,6 +14,7 @@ import { WeeklyTransactionsComponent } from "../../../components/weekly-transact
 import { RosterState } from '../../../store/rosters/rosters.reducers';
 import { getPlayersRequest } from '../../../store/players/players.actions';
 import { TITLE_TEXT } from '../../../data/constants/graph.constants';
+import { getCurrentTransactionsWeek } from '../../../utils/transactions';
 
 @Component({
   selector: 'app-home',
@@ -30,10 +31,10 @@ export class HomeComponent implements OnDestroy {
   sportState!: SportState;
   league!: League;
   rosters!: RosterState;
+  pageHeader!: string;
   weekTitle!: string;
   weekNumber!: number;
   transactions: Transaction[] = [];
-  seasonComplete = false;
   transactionsLoading = true;
   graphHeader = TITLE_TEXT;
 
@@ -59,14 +60,9 @@ export class HomeComponent implements OnDestroy {
           this.rosters = rosterData;
           this.league = leagueData.league;
           this.sportState = this.league.sportState;
-          this.seasonComplete = this.league.status === 'complete';
-          this.weekNumber = this.seasonComplete ? 18 : this.league.sportState.week;
-          this.weekTitle = `${this.league.sport.toUpperCase()} ${this.league.season} - Week ${this.weekNumber}`;
-          if (this.seasonComplete) {
-            this.transactionsLoading = false;
-          }
+          this.weekNumber = getCurrentTransactionsWeek(this.league);
+          this.pageHeader = this.#getPageHeader();
         }),
-        filter(() => !this.seasonComplete),
         tap(({ transactionsData }) => {
           if (!transactionsData.transactions[this.weekNumber]) {
             this.#store.dispatch(getTransactionsRequest({
@@ -80,15 +76,23 @@ export class HomeComponent implements OnDestroy {
       .subscribe();
   }
 
+  #getPageHeader(): string {
+    const opening = `${this.league.sport.toUpperCase()} ${this.league.season}`;
+    if (this.league.status === 'complete' || this.league.status === 'pre_draft') {
+      return `${opening} Offseason`
+    } else {
+      return `${opening} Week ${this.weekNumber}`;
+    }
+  }
+
   #subWeeklyTransactions(): Observable<any> {
     return combineLatest([this.#store.select(selectCurrentWeekTransactions), this.#store.select(selectAllPlayers)])
       .pipe(
-        filter(([_, players]) => !!players.ids.length),
+        filter(([t, players]) => !!t.length && !!players.ids.length && !players.isLoading),
         //necessary to prevent infinite refreshing
-        distinctUntilChanged(([_, p], [_b, pb]) => p.ids.length === pb.ids.length),
+        distinctUntilChanged(([t, p], [tb, pb]) => JSON.stringify(t) === JSON.stringify(tb) && p.ids.length === pb.ids.length),
         tap(([transactions]) => {
           const missingPlayers: any[] = [];
-          this.transactions = transactions;
           transactions.forEach(t => {
             t.rosterMoves?.forEach((m: any) => {
               m.adds?.forEach((a: any) => {
@@ -107,6 +111,7 @@ export class HomeComponent implements OnDestroy {
             this.#store.dispatch(getPlayersRequest({ sport: this.league.sport, ids: missingPlayers }));
           } else {
             this.transactionsLoading = false;
+            this.transactions = transactions;
           }
         }),
       )

@@ -1,63 +1,73 @@
-<ng-container *ngIf="isLoading else transactionList">
+@if (isLoading ) {
   <div class="flex items-center justify-center">
     <p-progressSpinner />
   </div>
-</ng-container>
-<ng-template #transactionList>
+} @else {
   <p-scroll-panel styleClass="max-h-[85vh] lg:max-h-[65vh]">
     <div class="flex flex-col gap-1">
-
-      <p *ngIf="!transactions.length else transactionList">No transactions this week.</p>
-
-      <ng-template #transactionList *ngFor="let t of transactions" class="flex flex-col">
-        <ng-container *ngIf="t.rosterMoves?.[0]?.type !== 'trade' else trade">
-          <ng-container *ngFor="let m of t.rosterMoves">
-            <h5 class="pb-2">{{(t.type === 'free_agent' ? 'free agent' : t.type) | titlecase}}</h5>
-            <div class="flex flex-col gap-3 text-xs">
-              <div class="flex items-center gap-2">
-                <img *ngIf="m.manager?.avatarUrl" [src]="m.manager?.avatarUrl" alt="avatar" width="30"
-                  class="rounded-md" />
-                <p>{{m.manager?.display_name ?? 'manager missing'}}</p>
-              </div>
-              <div class="flex items-start justify-between">
-                <div *ngFor="let add of m.adds" class="flex flex-col">
-                  <div>
-                    <i ngClass="fa-solid fa-plus add pr-2"></i>
-                    <p>{{add?.full_name ?? add.player_id}}</p>
+      @if (!transactions.length) {
+        <p>No transactions this week.</p>
+      } @else {
+        <div class="flex flex-col">
+          @for (t of transactions; track $index) {
+            @if (t.rosterMoves?.[0]?.type !== 'trade') {
+              @for (m of t.rosterMoves; track $index) {
+                <h5 class="pb-2">{{(t.type === 'free_agent' ? 'free agent' : t.type) | titlecase}}</h5>
+                <div class="flex flex-col gap-3 text-xs">
+                  <div class="flex items-center gap-2">
+                    @if (m.manager?.avatarUrl) {
+                      <img [src]="m.manager?.avatarUrl" alt="avatar" width="30" class="rounded-md" />
+                    }
+                    <p>{{m.manager?.display_name ?? 'manager missing'}}</p>
                   </div>
-                  <p *ngIf="m.waiverBid">Bid: ${{m.waiverBid}}</p>
-                </div>
-                <div *ngFor="let drop of m.drops">
-                  <i ngClass="fa-solid fa-minus drop pr-2"></i>
-                  <p>{{drop?.full_name ?? drop.player_id}}</p>
-                </div>
-              </div>
-            </div>
-          </ng-container>
-        </ng-container>
+                  <div class="flex items-start justify-between">
+                    @for (add of m.adds; track $index) {
+                      <div class="flex items-center">
+                        <i ngClass="fa-solid fa-plus add pr-2"></i>
+                        <p>{{add?.full_name ?? add.player_id}}</p>
+                      </div>
+                      @if (m.waiverBid) {
+                        <p>Bid: ${{m.waiverBid}}</p>
+                      }
+                    }
 
-        <ng-template #trade>
-          <h5 class="pb-2">Trade</h5>
-          <div class="flex justify-between text-xs">
-            <ng-container *ngFor="let m of t.rosterMoves; index as i">
-              <i *ngIf="i !== 0" class="fa-solid fa-rotate fa-xl self-center trade"></i>
-              <div class="flex flex-col h-full justify-between">
-                <div class="flex items-center gap-2 pb-2">
-                  <img *ngIf="m.manager?.avatarUrl" [src]="m.manager?.avatarUrl" alt="avatar" width="30"
-                    class="rounded-md" />
-                  <p>{{m.manager?.display_name ?? 'manager missing'}}</p>
+                    @for (drop of m.drops; track $index) {
+                      <div class="flex items-center">
+                        <i ngClass="fa-solid fa-minus drop pr-2"></i>
+                        <p>{{drop?.full_name ?? drop.player_id}}</p>
+                      </div>
+                    }
+                  </div>
                 </div>
-                <div *ngFor="let add of m.adds" class="flex items-center">
-                  <i ngClass="fa-solid fa-plus add pr-2"></i>
-                  <p>{{add?.full_name ?? add.player_id}}</p>
-                </div>
+              }
+            } @else {
+              <h5 class="pb-2">Trade</h5>
+              <div class="flex justify-between text-xs">
+                @for (m of t.rosterMoves; let i = $index; track i) {
+                  @if (i !== 0) {
+                    <i class="fa-solid fa-rotate fa-xl self-center trade"></i>
+                  }
+                  <div class="flex flex-col h-full justify-between">
+                    <div class="flex items-center gap-2 pb-2">
+                      @if (m.manager?.avatarUrl) {
+                        <img [src]="m.manager?.avatarUrl" alt="avatar" width="30" class="rounded-md" />
+                      }
+                      <p>{{m.manager?.display_name ?? 'manager missing'}}</p>
+                    </div>
+                    @for (add of m.adds; track $index) {
+                      <div class="flex items-center">
+                        <i ngClass="fa-solid fa-plus add pr-2"></i>
+                        <p>{{add?.full_name ?? add.player_id}}</p>
+                      </div>
+                    }
+                  </div>
+                }
               </div>
-            </ng-container>
-          </div>
-        </ng-template>
-
-        <p-divider />
-      </ng-template>
+            }
+            <p-divider />
+          }
+        </div>
+      }
     </div>
   </p-scroll-panel>
-</ng-template>
+}
