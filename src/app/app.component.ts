@@ -18,6 +18,9 @@ export class AppComponent {
     const id = localStorage.getItem('LEAGUE_ID');
     if (!!id) {
       this.#store.dispatch(leagueEntryRequest({ leagueId: id }));
+      if (!this.#router.url.includes('league')) {
+        this.#router.navigateByUrl('/league');
+      }
     } else {
       this.#router.navigateByUrl('/welcome');
     }
