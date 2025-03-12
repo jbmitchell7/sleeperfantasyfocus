@@ -1,6 +1,6 @@
 {
-  "name": "sleeperfantasyfocus",
-  "short_name": "sleeperfantasyfocus",
+  "name": "tc_fantasy_dashboard",
+  "short_name": "fantasy_dashboard",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

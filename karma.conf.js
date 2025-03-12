@@ -26,7 +26,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/sleeperfantasyfocus'),
+      dir: require('path').join(__dirname, './coverage/tc-fantasy-dashboard'),
       subdir: '.',
       reporters: [
         { type: 'html' },
