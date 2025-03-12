@@ -3,7 +3,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { provideServiceWorker } from '@angular/service-worker';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import { provideRouter } from '@angular/router';
@@ -30,12 +29,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode(), connectInZone: true }),
     provideEffects([GlobalEffects]),
-    provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      // Register the ServiceWorker as soon as the application is stable
-      // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    }),
     providePrimeNG({
       theme: {
         preset: myTheme,
