@@ -15,10 +15,11 @@ import { RosterState } from '../../../store/rosters/rosters.reducers';
 import { getPlayersRequest } from '../../../store/players/players.actions';
 import { TITLE_TEXT } from '../../../data/constants/graph.constants';
 import { getCurrentTransactionsWeek } from '../../../utils/transactions';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, GraphComponent, PanelModule, WeeklyTransactionsComponent],
+  imports: [CommonModule, GraphComponent, PanelModule, WeeklyTransactionsComponent, ProgressSpinnerModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

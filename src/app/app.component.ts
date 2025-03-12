@@ -19,7 +19,7 @@ export class AppComponent {
     if (!!id) {
       this.#store.dispatch(leagueEntryRequest({ leagueId: id }));
     } else {
-      this.#router.navigate(['welcome']);
+      this.#router.navigateByUrl('/welcome');
     }
   }
 

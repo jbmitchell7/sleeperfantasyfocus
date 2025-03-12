@@ -86,7 +86,7 @@ export class NavbarComponent {
     this.#store.dispatch(clearRosterData());
     this.#store.dispatch(clearManagersData());
     localStorage.setItem('LEAGUE_ID', '');
-    this.#router.navigate(['welcome']);
+    this.#router.navigateByUrl('/welcome');
   }
 
   #setNextSeason(league: League): void {

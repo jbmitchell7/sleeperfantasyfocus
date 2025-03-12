@@ -32,7 +32,7 @@ export class GlobalEffects {
         this.#sleeperApi.getLeague(props.leagueId).pipe(
           map((res: League) => getLeagueSuccess({ league: res })),
           catchError(() => {
-            this.#router.navigate(['welcome']);
+            this.#router.navigateByUrl('/welcome');
             return of(getLeagueFailure({ error: 'error getting league data' }))
           })
         )
@@ -47,11 +47,10 @@ export class GlobalEffects {
         this.#sleeperApi.getSportState(props.league.sport).pipe(
           map((sport: SportState) => {
             localStorage.setItem('LEAGUE_ID', props.league.league_id);
-            this.#router.navigate(['league']);
             return getSportStateSuccess({sport});
           }),
           catchError((error) => {
-            this.#router.navigate(['welcome']);
+            this.#router.navigateByUrl('/welcome');
             return of(getSportStateFailure({error}));
           })
         )
