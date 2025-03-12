@@ -42,24 +42,26 @@
               }
             } @else {
               <h5 class="pb-2">Trade</h5>
-              <div class="flex justify-between text-xs">
+              <div class="flex flex-col items-center gap-5 text-xs">
                 @for (m of t.rosterMoves; let i = $index; track i) {
                   @if (i !== 0) {
                     <i class="fa-solid fa-rotate fa-xl self-center trade"></i>
                   }
-                  <div class="flex flex-col h-full justify-between">
-                    <div class="flex items-center gap-2 pb-2">
+                  <div class="flex items-center justify-between w-full" [ngClass]="{'items-start': m.adds.length > 1}">
+                    <div class="flex items-center gap-2">
                       @if (m.manager?.avatarUrl) {
                         <img [src]="m.manager?.avatarUrl" alt="avatar" width="30" class="rounded-md" />
                       }
                       <p>{{m.manager?.display_name ?? 'manager missing'}}</p>
                     </div>
-                    @for (add of m.adds; track $index) {
-                      <div class="flex items-center">
-                        <i ngClass="fa-solid fa-plus add pr-2"></i>
-                        <p>{{add?.full_name ?? add.player_id}}</p>
-                      </div>
-                    }
+                    <div class="flex flex-col">
+                      @for (add of m.adds; track $index) {
+                        <div class="flex items-center">
+                          <i ngClass="fa-solid fa-plus add pr-2"></i>
+                          <p>{{add?.full_name ?? add.player_id}}</p>
+                        </div>
+                      }
+                    </div>
                   </div>
                 }
               </div>
